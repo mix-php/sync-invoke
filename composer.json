@@ -1,0 +1,32 @@
+{
+  "name": "mix/sync-invoke",
+  "description": "Mix Sync Invoke http://www.mixphp.cn",
+  "type": "framework",
+  "keywords": [
+    "framework",
+    "mix",
+    "swoole"
+  ],
+  "homepage": "http://www.mixphp.cn/",
+  "license": "Apache-2.0",
+  "authors": [
+    {
+      "name": "liu,jian",
+      "email": "coder.keda@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "jeremeamia/superclosure": "^2.0",
+    "mix/bean": "v2.1.0-RC2",
+    "mix/server": "v2.1.0-RC2"
+  },
+  "require-dev": {
+    "swoole/ide-helper": "dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mix\\Sync\\Invoke\\": "src/"
+    }
+  }
+}
