@@ -9,6 +9,6 @@ namespace Mix\Sync\Invoke;
 class Connection
 {
 
-    
+
 
 }
