@@ -17,9 +17,9 @@ class Connection
     use ConnectionTrait;
 
     /**
-     * @var string
+     * @var int
      */
-    public $unixAddress = 'unix:/tmp/php.sock';
+    public $port = 0;
 
     /**
      * @var float
@@ -39,23 +39,23 @@ class Connection
 
     /**
      * Connection constructor.
-     * @param string $unixAddress
+     * @param int $port
      * @param float $timeout
      * @param string $eof
      * @throws \Swoole\Exception
      */
-    public function __construct(string $unixAddress, float $timeout = 5.0, string $eof = "-Y3ac0v\n")
+    public function __construct(int $port, float $timeout = 5.0, string $eof = "-Y3ac0v\n")
     {
-        $this->unixAddress = $unixAddress;
-        $this->timeout     = $timeout;
-        $this->eof         = $eof;
-        $client            = new Client(SWOOLE_SOCK_UNIX_STREAM);
+        $this->port    = $port;
+        $this->timeout = $timeout;
+        $this->eof     = $eof;
+        $client        = new Client(SWOOLE_SOCK_TCP);
         $client->set([
             'open_eof_check' => true,
             'package_eof'    => $eof,
         ]);
-        if (!$client->connect(str_replace('unix:', '', $unixAddress), 0, $timeout)) {
-            throw new \Swoole\Exception(sprintf("Connect failed (addr: '%s') [%s] %s", $unixAddress, $client->errCode, $client->errMsg));
+        if (!$client->connect('127.0.0.1', $port, $timeout)) {
+            throw new \Swoole\Exception(sprintf("Connect failed (port: '%s') [%s] %s", $port, $client->errCode, $client->errMsg));
         }
         $this->client = $client;
     }

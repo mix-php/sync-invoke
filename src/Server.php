@@ -15,9 +15,9 @@ class Server
 {
 
     /**
-     * @var string
+     * @var int
      */
-    public $unixAddress = 'unix:/tmp/php.sock';
+    public $port = 0;
 
     /**
      * @var bool
@@ -37,15 +37,15 @@ class Server
 
     /**
      * Server constructor.
-     * @param string $unixAddress
+     * @param int $port
      * @param bool $reusePort
      * @param string $eof
      */
-    public function __construct(string $unixAddress, bool $reusePort = false, string $eof = "-Y3ac0v\n")
+    public function __construct(int $port, bool $reusePort = false, string $eof = "-Y3ac0v\n")
     {
-        $this->unixAddress = $unixAddress;
-        $this->reusePort   = $reusePort;
-        $this->eof         = $eof;
+        $this->port      = $port;
+        $this->reusePort = $reusePort;
+        $this->eof       = $eof;
     }
 
     /**
@@ -54,7 +54,7 @@ class Server
      */
     public function start()
     {
-        $server = $this->server = new \Mix\Server\Server($this->unixAddress, 0, false, $this->reusePort);
+        $server = $this->server = new \Mix\Server\Server('127.0.0.1', $this->port, false, $this->reusePort);
         $server->set([
             'open_eof_check' => true,
             'package_eof'    => $this->eof,
