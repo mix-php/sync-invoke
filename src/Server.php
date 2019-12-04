@@ -25,27 +25,24 @@ class Server
     public $reusePort = false;
 
     /**
-     * EOF
-     * @var string
-     */
-    public $eof = "-Y3ac0v\n";
-
-    /**
      * @var \Mix\Server\Server
      */
     protected $server;
 
     /**
+     * EOF
+     */
+    const EOF = "-Y3ac0v\n";
+
+    /**
      * Server constructor.
      * @param int $port
      * @param bool $reusePort
-     * @param string $eof
      */
-    public function __construct(int $port, bool $reusePort = false, string $eof = "-Y3ac0v\n")
+    public function __construct(int $port, bool $reusePort = false)
     {
         $this->port      = $port;
         $this->reusePort = $reusePort;
-        $this->eof       = $eof;
     }
 
     /**
@@ -57,7 +54,7 @@ class Server
         $server = $this->server = new \Mix\Server\Server('127.0.0.1', $this->port, false, $this->reusePort);
         $server->set([
             'open_eof_check' => true,
-            'package_eof'    => $this->eof,
+            'package_eof'    => static::EOF,
         ]);
         $server->handle(function (Connection $conn) {
             while (true) {
@@ -66,7 +63,7 @@ class Server
                     $serializer = new Serializer(new AstAnalyzer());
                     $closure    = $serializer->unserialize($data);
                     $data       = call_user_func($closure);
-                    $conn->send(serialize($data) . $this->eof);
+                    $conn->send(serialize($data) . static::EOF);
                 } catch (\Throwable $e) {
                     // 忽略服务器主动断开连接异常
                     if ($e instanceof ReceiveException && $e->getCode() == 104) {

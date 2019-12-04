@@ -27,32 +27,29 @@ class Connection
     public $timeout = 0.0;
 
     /**
-     * EOF
-     * @var string
-     */
-    public $eof = "-Y3ac0v\n";
-
-    /**
      * @var Client
      */
     protected $client;
 
     /**
+     * EOF
+     */
+    const EOF = "-Y3ac0v\n";
+
+    /**
      * Connection constructor.
      * @param int $port
      * @param float $timeout
-     * @param string $eof
      * @throws \Swoole\Exception
      */
-    public function __construct(int $port, float $timeout = 5.0, string $eof = "-Y3ac0v\n")
+    public function __construct(int $port, float $timeout = 5.0)
     {
         $this->port    = $port;
         $this->timeout = $timeout;
-        $this->eof     = $eof;
         $client        = new Client(SWOOLE_SOCK_TCP);
         $client->set([
             'open_eof_check' => true,
-            'package_eof'    => $eof,
+            'package_eof'    => static::EOF,
         ]);
         if (!$client->connect('127.0.0.1', $port, $timeout)) {
             throw new \Swoole\Exception(sprintf("Connect failed (port: '%s') [%s] %s", $port, $client->errCode, $client->errMsg));
@@ -95,7 +92,7 @@ class Connection
     {
         $serializer = new Serializer(new AstAnalyzer());
         $code       = $serializer->serialize($closure);
-        $this->send($code . $this->eof);
+        $this->send($code . static::EOF);
         $data = $this->recv();
         return unserialize($data);
     }
