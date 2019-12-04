@@ -18,9 +18,9 @@
   "require": {
     "php": ">=7.0.0",
     "jeremeamia/superclosure": "^2.0",
-    "mix/bean": "v2.1.0-RC2",
-    "mix/server": "v2.1.0-RC2",
-    "mix/pool": "v2.1.0-RC2"
+    "mix/bean": "~2.1.0",
+    "mix/server": "~2.1.0",
+    "mix/pool": "~2.1.0"
   },
   "require-dev": {
     "swoole/ide-helper": "dev-master"
