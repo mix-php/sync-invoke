@@ -3,6 +3,8 @@
 namespace Mix\Sync\Invoke;
 
 use Mix\Pool\ConnectionTrait;
+use Mix\Sync\Invoke\Exception\CallException;
+use Mix\Sync\Invoke\Exception\InvokeException;
 use Swoole\Coroutine\Client;
 use SuperClosure\Serializer;
 use SuperClosure\Analyzer\AstAnalyzer;
@@ -86,6 +88,7 @@ class Connection
      * Invoke
      * @param \Closure $closure
      * @return mixed
+     * @throws InvokeException
      * @throws \Swoole\Exception
      */
     public function invoke(\Closure $closure)
@@ -93,8 +96,11 @@ class Connection
         $serializer = new Serializer(new AstAnalyzer());
         $code       = $serializer->serialize($closure);
         $this->send($code . static::EOF);
-        $data = $this->recv();
-        return unserialize($data);
+        $data = unserialize($this->recv());
+        if ($data instanceof CallException) {
+            throw new InvokeException($data->message, $data->code);
+        }
+        return $data;
     }
 
     /**
