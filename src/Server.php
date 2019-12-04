@@ -3,6 +3,9 @@
 namespace Mix\Sync\Invoke;
 
 use Mix\Server\Connection;
+use Mix\Server\Exception\ReceiveException;
+use SuperClosure\Serializer;
+use SuperClosure\Analyzer\AstAnalyzer;
 
 /**
  * Class Server
@@ -53,8 +56,22 @@ class Server
             'open_eof_check' => true,
             'package_eof'    => static::EOF,
         ]);
-        $server->handle(function (Connection $connection) {
-
+        $server->handle(function (Connection $conn) {
+            while (true) {
+                try {
+                    $data       = $conn->recv();
+                    $serializer = new Serializer(new AstAnalyzer());
+                    $closure    = $serializer->unserialize($data);
+                    call_user_func($closure);
+                } catch (\Throwable $e) {
+                    // 忽略服务器主动断开连接异常
+                    if ($e instanceof ReceiveException && $e->getCode() == 104) {
+                        return;
+                    }
+                    // 抛出异常
+                    throw $e;
+                }
+            }
         });
         $server->start();
     }
