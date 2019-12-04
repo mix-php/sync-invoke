@@ -27,32 +27,35 @@ class Connection
     public $timeout = 0.0;
 
     /**
+     * EOF
+     * @var string
+     */
+    public $eof = "-Y3ac0v\n";
+
+    /**
      * @var Client
      */
     protected $client;
 
     /**
-     * EOF
-     */
-    const EOF = "\n";
-
-    /**
      * Connection constructor.
      * @param string $unixAddress
      * @param float $timeout
+     * @param string $eof
      * @throws \Swoole\Exception
      */
-    public function __construct(string $unixAddress, float $timeout)
+    public function __construct(string $unixAddress, float $timeout = 5.0, string $eof = "-Y3ac0v\n")
     {
         $this->unixAddress = $unixAddress;
         $this->timeout     = $timeout;
+        $this->eof         = $eof;
         $client            = new Client(SWOOLE_SOCK_UNIX_STREAM);
         $client->set([
             'open_eof_check' => true,
-            'package_eof'    => static::EOF,
+            'package_eof'    => $eof,
         ]);
-        if (!$client->connect($unixAddress, 0, $timeout)) {
-            throw new \Swoole\Exception(sprintf('Connect failed (addr: %s) [%s] %s', $unixAddress, $client->errCode, $client->errMsg));
+        if (!$client->connect(str_replace('unix:', '', $unixAddress), 0, $timeout)) {
+            throw new \Swoole\Exception(sprintf("Connect failed (addr: '%s') [%s] %s", $unixAddress, $client->errCode, $client->errMsg));
         }
         $this->client = $client;
     }
@@ -83,14 +86,32 @@ class Connection
     }
 
     /**
+     * Invoke
      * @param \Closure $closure
+     * @return mixed
      * @throws \Swoole\Exception
      */
     public function invoke(\Closure $closure)
     {
         $serializer = new Serializer(new AstAnalyzer());
-        $data       = $serializer->serialize($closure);
-        $this->send($data . static::EOF);
+        $code       = $serializer->serialize($closure);
+        $this->send($code . $this->eof);
+        $data = $this->recv();
+        return unserialize($data);
+    }
+
+    /**
+     * Recv
+     * @return mixed
+     * @throws \Swoole\Exception
+     */
+    public function recv()
+    {
+        $data = $this->client->recv(-1);
+        if ($data === false || $data === "") {
+            throw new \Swoole\Exception($this->client->errMsg, $this->client->errCode);
+        }
+        return $data;
     }
 
     /**
