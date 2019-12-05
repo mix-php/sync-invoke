@@ -25,7 +25,6 @@
   "require-dev": {
     "swoole/ide-helper": "dev-master"
   },
-  "minimum-stability": "RC",
   "autoload": {
     "psr-4": {
       "Mix\\Sync\\Invoke\\": "src/"
