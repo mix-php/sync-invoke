@@ -6,8 +6,6 @@ use Mix\Pool\ConnectionTrait;
 use Mix\Sync\Invoke\Exception\CallException;
 use Mix\Sync\Invoke\Exception\InvokeException;
 use Swoole\Coroutine\Client;
-use SuperClosure\Serializer;
-use SuperClosure\Analyzer\AstAnalyzer;
 
 /**
  * Class Connection
@@ -93,8 +91,7 @@ class Connection
      */
     public function invoke(\Closure $closure)
     {
-        $serializer = new Serializer(new AstAnalyzer());
-        $code       = $serializer->serialize($closure);
+        $code = \Opis\Closure\serialize($closure);
         $this->send($code . static::EOF);
         $data = unserialize($this->recv());
         if ($data instanceof CallException) {

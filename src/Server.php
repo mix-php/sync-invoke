@@ -5,8 +5,6 @@ namespace Mix\Sync\Invoke;
 use Mix\Server\Connection;
 use Mix\Server\Exception\ReceiveException;
 use Mix\Sync\Invoke\Exception\CallException;
-use SuperClosure\Serializer;
-use SuperClosure\Analyzer\AstAnalyzer;
 
 /**
  * Class Server
@@ -31,11 +29,6 @@ class Server
     protected $server;
 
     /**
-     * @var Serializer
-     */
-    protected $serializer;
-
-    /**
      * EOF
      */
     const EOF = "-Y3ac0v\n";
@@ -47,9 +40,8 @@ class Server
      */
     public function __construct(int $port, bool $reusePort = false)
     {
-        $this->port       = $port;
-        $this->reusePort  = $reusePort;
-        $this->serializer = new Serializer(new AstAnalyzer());
+        $this->port      = $port;
+        $this->reusePort = $reusePort;
     }
 
     /**
@@ -67,7 +59,7 @@ class Server
             while (true) {
                 try {
                     $data    = $conn->recv();
-                    $closure = $this->serializer->unserialize($data);
+                    $closure = \Opis\Closure\unserialize($data);
                     try {
                         $result = call_user_func($closure);
                     } catch (\Throwable $e) {
