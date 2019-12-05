@@ -105,7 +105,7 @@ class Connection
      * @return mixed
      * @throws \Swoole\Exception
      */
-    public function recv()
+    protected function recv()
     {
         $data = $this->client->recv(-1);
         if ($data === false || $data === "") {
