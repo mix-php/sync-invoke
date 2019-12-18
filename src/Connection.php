@@ -52,7 +52,7 @@ class Connection
             'package_eof'    => static::EOF,
         ]);
         if (!$client->connect('127.0.0.1', $port, $timeout)) {
-            throw new \Swoole\Exception(sprintf("Connect failed (port: '%s') [%s] %s", $port, $client->errCode, $client->errMsg));
+            throw new \Swoole\Exception(sprintf("%s (port: %s)", $client->errMsg, $port), $client->errCode);
         }
         $this->client = $client;
     }
