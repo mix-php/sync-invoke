@@ -83,29 +83,11 @@ class Connection
     }
 
     /**
-     * Invoke
-     * @param \Closure $closure
-     * @return mixed
-     * @throws InvokeException
-     * @throws \Swoole\Exception
-     */
-    public function invoke(\Closure $closure)
-    {
-        $code = \Opis\Closure\serialize($closure);
-        $this->send($code . static::EOF);
-        $data = unserialize($this->recv());
-        if ($data instanceof CallException) {
-            throw new InvokeException($data->message, $data->code);
-        }
-        return $data;
-    }
-
-    /**
      * Recv
      * @return mixed
      * @throws \Swoole\Exception
      */
-    protected function recv()
+    public function recv()
     {
         $data = $this->client->recv(-1);
         if ($data === false || $data === "") {
@@ -119,7 +101,7 @@ class Connection
      * @param string $data
      * @throws \Swoole\Exception
      */
-    protected function send(string $data)
+    public function send(string $data)
     {
         $len  = strlen($data);
         $size = $this->client->send($data);
