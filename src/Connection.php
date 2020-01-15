@@ -52,7 +52,7 @@ class Connection
             'package_eof'    => static::EOF,
         ]);
         if (!$client->connect('127.0.0.1', $port, $timeout)) {
-            throw new \Swoole\Exception(sprintf("%s (port: %s)", $client->errMsg, $port), $client->errCode);
+            throw new \Swoole\Exception(sprintf("Sync invoke: %s (port: %s)", $client->errMsg, $port), $client->errCode);
         }
         $this->client = $client;
     }
