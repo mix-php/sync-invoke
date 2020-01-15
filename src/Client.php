@@ -1,15 +1,15 @@
 <?php
 
-namespace Mix\Sync\Invoke;
+namespace Mix\SyncInvoke;
 
 use Mix\Bean\BeanInjector;
 use Mix\Pool\ConnectionPoolInterface;
-use Mix\Sync\Invoke\Exception\CallException;
-use Mix\Sync\Invoke\Exception\InvokeException;
+use Mix\SyncInvoke\Exception\CallException;
+use Mix\SyncInvoke\Exception\InvokeException;
 
 /**
  * Class Client
- * @package Mix\Sync\Invoke
+ * @package Mix\SyncInvoke
  */
 class Client
 {

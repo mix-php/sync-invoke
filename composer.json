@@ -27,7 +27,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Mix\\Sync\\Invoke\\": "src/"
+      "Mix\\SyncInvoke\\": "src/"
     }
   }
 }

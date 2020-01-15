@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Sync\Invoke\Pool;
+namespace Mix\SyncInvoke\Pool;
 
 use Mix\Pool\ConnectionPoolInterface;
 use Mix\Pool\AbstractConnectionPool;
-use Mix\Sync\Invoke\Connection;
+use Mix\SyncInvoke\Connection;
 
 /**
  * Class ConnectionPool

@@ -1,15 +1,15 @@
 <?php
 
-namespace Mix\Sync\Invoke;
+namespace Mix\SyncInvoke;
 
 use Mix\Pool\ConnectionTrait;
-use Mix\Sync\Invoke\Exception\CallException;
-use Mix\Sync\Invoke\Exception\InvokeException;
+use Mix\SyncInvoke\Exception\CallException;
+use Mix\SyncInvoke\Exception\InvokeException;
 use Swoole\Coroutine\Client;
 
 /**
  * Class Connection
- * @package Mix\Sync\Invoke
+ * @package Mix\SyncInvoke
  */
 class Connection
 {

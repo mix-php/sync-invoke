@@ -1,10 +1,10 @@
 <?php
 
-namespace Mix\Sync\Invoke\Exception;
+namespace Mix\SyncInvoke\Exception;
 
 /**
  * Class InvokeException
- * @package Mix\Sync\Invoke\Exception
+ * @package Mix\SyncInvoke\Exception
  */
 class InvokeException extends \Exception
 {

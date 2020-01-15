@@ -1,14 +1,14 @@
 <?php
 
-namespace Mix\Sync\Invoke;
+namespace Mix\SyncInvoke;
 
 use Mix\Server\Connection;
 use Mix\Server\Exception\ReceiveException;
-use Mix\Sync\Invoke\Exception\CallException;
+use Mix\SyncInvoke\Exception\CallException;
 
 /**
  * Class Server
- * @package Mix\Sync\Invoke
+ * @package Mix\SyncInvoke
  */
 class Server
 {
